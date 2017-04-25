@@ -1,0 +1,5 @@
+*.gz
+__pycache__/
+*.csv
+.ipynb-checkpoints/
+*.ipynb
