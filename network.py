@@ -1,5 +1,15 @@
 import numpy as np
 
+np.random.seed(1)
+
+
+def init_layer(neuron_n):
+    ''' initialize layer with neuron size n
+    '''
+    w = np.random.rand(neuron_n)
+    b = np.random.rand(1)
+    return {'weight': w, 'bias': b}
+
 
 def init_network(input_n, hidden_n, output_n):
     ''' build network structure
@@ -8,19 +18,15 @@ def init_network(input_n, hidden_n, output_n):
             hidden_n: number of neurons in hidden layer
             output_n: number of outputs
     '''
-    np.random.seed(1)
-    hidden = [{'weights': np.random.rand(input_n + 1)} 
-              for i in range(hidden_n)]
-    output = [{'weights': np.random.rand(hidden_n + 1)}
-              for i in range(output_n)]
+    hidden = [init_layer(input_n) for i in range(hidden_n)]
+    output = [init_layer(input_n) for i in range(output_n)]
     return [hidden, output]
 
 
-def activate(weights, inputs):
+def activate(weights, bias, inputs):
     '''
     '''
-    n = weights.shape[0] - 1
-    return np.sum(weights[:n] * inputs[:n]) + weights[-1]
+    return np.dot(weights, inputs) + bias
 
 
 def transfer(activation):
@@ -42,8 +48,8 @@ def forward_propagate(network, row):
     for layer in network:
         new_inputs = []
         for neuron in layer:
-            activation = activate(neuron['weights'], inputs)
-            neuron['output'] = transfer(activation)
+            act = activate(neuron['weights'],  neuron['bias'], inputs)
+            neuron['output'] = transfer(act)
             new_inputs.append(neuron['output'])
         inputs = np.array(new_inputs)
     return inputs
