@@ -3,11 +3,12 @@ import numpy as np
 np.random.seed(1)
 
 
-def init_layer(neuron_n):
-    ''' initialize layer with neuron size n
+def init_layer(input_n, neuron_n):
+    ''' initialize layer with n neurons
+        expecting n input features
     '''
-    w = np.random.rand(neuron_n)
-    b = np.random.rand(1)
+    w = np.random.normal(0, 1, [input_n, neuron_n]) 
+    b = np.random.rand([input_n, neuron_n])
     return {'weight': w, 'bias': b}
 
 
@@ -18,15 +19,15 @@ def init_network(input_n, hidden_n, output_n):
             hidden_n: number of neurons in hidden layer
             output_n: number of outputs
     '''
-    hidden = [init_layer(input_n) for i in range(hidden_n)]
-    output = [init_layer(input_n) for i in range(output_n)]
+    hidden = init_layer(input_n, hidden_n)
+    output = init_layer(input_n, hidden_n)
     return [hidden, output]
 
 
 def activate(weights, bias, inputs):
     '''
     '''
-    return np.dot(weights, inputs) + bias
+    return np.dot(inputs, weights) + bias
 
 
 def transfer(activation):
